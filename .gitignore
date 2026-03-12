@@ -22,12 +22,18 @@ venv/
 .idea/
 *.swp
 
-# Large prompt corpus (regeneratable from Pick-a-Pic)
-prompts/pickapic_all_unique.txt
-
 # Personal session artifacts
-docs/session_notes_*.md
 TODO_顶会投稿.md
+docs/
+
+# Analysis / dev scripts not part of public release
+COMPARISON_TABLES.md
+EXPERIMENT_PLAN.md
+PAPER_OUTLINE.md
+PRIOR_WORK_ANALYSIS.md
+PROGRESS.md
+SUPPLEMENTARY_PLAN.md
+vis_compare.pdf
 
 # HuggingFace cache / model weights
 hf_home/
