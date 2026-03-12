@@ -1,4 +1,4 @@
-# AccelAes
+# AccelAes: Accelerating Diffusion Transformers for Training-Free Aesthetic-Enhanced Image Generation
 
 **AccelAes** is a training-free DiT inference acceleration framework that combines aesthetic-aware sparse attention (AesMask) with frame-level step skipping (StepSkip), achieving **2.1× speedup** with improved image quality on Lumina-Next-T2I, FLUX.1-dev, and SD3-Medium.
 
