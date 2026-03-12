@@ -1,0 +1,50 @@
+# Generated outputs (images, metrics) — too large for git
+outputs/
+
+# Logs
+logs/
+
+# Python cache
+__pycache__/
+*.py[cod]
+.pytest_cache/
+
+# Environments
+.env
+*.egg-info/
+dist/
+build/
+.venv/
+venv/
+
+# IDE
+.vscode/
+.idea/
+*.swp
+
+# Large prompt corpus (regeneratable from Pick-a-Pic)
+prompts/pickapic_all_unique.txt
+
+# Personal session artifacts
+docs/session_notes_*.md
+TODO_顶会投稿.md
+
+# HuggingFace cache / model weights
+hf_home/
+*.safetensors
+*.bin
+
+# Jupyter
+.ipynb_checkpoints/
+
+# Model cache weights
+.cache/
+
+# Misc artifacts
+"=== All re-runs done ==="
+
+# Paper draft PDFs (not for public repo)
+AccelAes_v3.pdf
+SASD_plan.pdf
+SUPPLEMENTARY_PLAN.pdf
+contribution.pdf

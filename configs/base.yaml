@@ -1,0 +1,28 @@
+model:
+  name: "Alpha-VLLM/Lumina-Next-SFT-diffusers"
+  dtype: bf16
+
+sampler:
+  steps: 30
+
+generation:
+  resolution: 1024
+  batch_size: 1
+  cfg_scale: 4.0
+
+seeds: [0, 1, 2, 3, 4, 5, 6, 7, 8, 9,
+        10, 11, 12, 13, 14, 15, 16, 17, 18, 19,
+        20, 21, 22, 23, 24, 25, 26, 27, 28, 29,
+        30, 31, 32, 33, 34, 35, 36, 37, 38, 39,
+        40, 41, 42, 43, 44, 45, 46, 47, 48, 49]
+
+speed:
+  warmup_runs: 5
+  measure_runs: 30
+  cudnn_benchmark: false
+  matmul_precision: "high"
+
+paths:
+  prompts_dev: "prompts/prompts_dev.txt"
+  prompts_report: "prompts/prompts_report.txt"
+  output_dir: "outputs"
