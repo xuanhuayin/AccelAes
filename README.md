@@ -125,8 +125,6 @@ scripts/
   run_stepcache_fulleval.py # FLUX.1-dev comparison
   eval_metrics.py          # Compute paper metrics on generated images
 prompts/
-  prompts_dev.txt          # 200-prompt general evaluation set
-  prompts_all.txt          # 40-prompt aesthetic evaluation set
   pickapic_all_unique.txt  # 10,000-prompt Pick-a-Pic evaluation set
 configs/
   base.yaml                # Default hyperparameters
