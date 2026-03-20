@@ -1,5 +1,7 @@
 # AccelAes: Accelerating Diffusion Transformers for Training-Free Aesthetic-Enhanced Image Generation
 
+[![arXiv](https://img.shields.io/badge/arXiv-2603.12575-b31b1b.svg)](https://arxiv.org/abs/2603.12575)
+
 **AccelAes** is a training-free DiT inference acceleration framework that combines aesthetic-aware sparse attention (AesMask) with frame-level step skipping (StepSkip), achieving **2.1× speedup** with improved image quality on Lumina-Next-T2I, FLUX.1-dev, and SD3-Medium.
 
 <img src="assets/teaser.png" width="100%">
@@ -145,4 +147,17 @@ sparse_ffn       = True
 sparse_blocks    = True
 cfg_scale        = 4.0
 steps            = 30
+```
+
+## Citation
+
+If you find this work useful, please cite:
+
+```bibtex
+@article{yin2026accelaes,
+  title={AccelAes: Accelerating Diffusion Transformers for Training-Free Aesthetic-Enhanced Image Generation},
+  author={Yin, Xuanhua and Xu, Chuanzhi and Zhou, Haoxian and Wei, Boyu and Cai, Weidong},
+  journal={arXiv preprint arXiv:2603.12575},
+  year={2026}
+}
 ```
