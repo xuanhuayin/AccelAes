@@ -27,7 +27,13 @@ TODO_顶会投稿.md
 prompts/prompts_dev.txt
 prompts/prompts_all.txt
 prompts/prompts_report.txt
-docs/
+docs/*
+!docs/
+!docs/index.html
+!docs/styles.css
+!docs/script.js
+!docs/assets/
+!docs/assets/*.webp
 
 # Analysis / dev scripts not part of public release
 COMPARISON_TABLES.md
@@ -54,6 +60,8 @@ hf_home/
 
 # Paper draft PDFs (not for public repo)
 AccelAes_v3.pdf
+AccelAes_arxiv_v3.zip
+ECCV_2026_Rebuttal_AccelAes_v4-2.pdf
 SASD_plan.pdf
 SUPPLEMENTARY_PLAN.pdf
 contribution.pdf

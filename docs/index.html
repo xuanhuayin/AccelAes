@@ -1,0 +1,378 @@
+<!doctype html>
+<html lang="en">
+  <head>
+    <meta charset="utf-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1">
+    <meta name="description" content="AccelAes, an ECCV 2026 accepted project by Xuanhua Yin, accelerates Diffusion Transformers with training-free aesthetic-aware spatio-temporal reduction.">
+    <meta name="author" content="Xuanhua Yin">
+    <meta property="og:title" content="AccelAes">
+    <meta property="og:description" content="Training-free aesthetic-enhanced acceleration for Diffusion Transformers. ECCV 2026 accepted.">
+    <meta property="og:image" content="assets/teaser.webp">
+    <meta property="og:type" content="website">
+    <title>AccelAes | ECCV 2026</title>
+    <link rel="stylesheet" href="styles.css">
+  </head>
+  <body>
+    <header class="site-header" aria-label="Project navigation">
+      <a class="brand" href="#top" aria-label="AccelAes home">
+        <span class="brand-mark">A</span>
+        <span>AccelAes</span>
+      </a>
+      <nav class="nav-links" aria-label="Main sections">
+        <a href="#abstract">Abstract</a>
+        <a href="#method">Method</a>
+        <a href="#results">Results</a>
+        <a href="#rebuttal">Evidence</a>
+        <a href="#gallery">Gallery</a>
+        <a href="#citation">Citation</a>
+      </nav>
+    </header>
+
+    <main id="top">
+      <section class="hero section-pad">
+        <div class="hero-copy">
+          <p class="venue">ECCV 2026 Accepted</p>
+          <h1>AccelAes: Accelerating Diffusion Transformers for Training-Free Aesthetic-Enhanced Image Generation</h1>
+          <p class="subtitle">
+            A project led by <strong>Xuanhua Yin</strong> for faster, sharper, and more preference-aligned text-to-image generation without training or modifying backbone weights.
+          </p>
+          <div class="authors" aria-label="Authors">
+            <a href="https://scholar.google.com/citations?user=oe5K56oAAAAJ&hl=en">Xuanhua Yin</a>
+            <span>Chuanzhi Xu</span>
+            <span>Haoxian Zhou</span>
+            <span>Boyu Wei</span>
+            <span>Weidong Cai</span>
+          </div>
+          <p class="affiliation">School of Computer Science, The University of Sydney</p>
+          <div class="hero-actions" aria-label="Project links">
+            <a class="button primary" href="https://arxiv.org/pdf/2603.12575">Paper</a>
+            <a class="button" href="https://github.com/xuanhuayin/AccelAes">Code</a>
+            <a class="button" href="https://arxiv.org/abs/2603.12575">arXiv</a>
+            <a class="button" href="#citation">BibTeX</a>
+          </div>
+        </div>
+
+        <figure class="hero-figure">
+          <img src="assets/teaser.webp" alt="AccelAes teaser comparing baseline and AccelAes visual quality, speed-quality tradeoff, and multi-metric radar chart." fetchpriority="high">
+          <figcaption>
+            AccelAes reallocates computation to aesthetically sensitive regions and reaches a stronger speed-quality tradeoff than prior training-free DiT acceleration baselines.
+          </figcaption>
+        </figure>
+      </section>
+
+      <section class="metrics-strip" aria-label="Headline metrics">
+        <div>
+          <span class="metric-value">2.11x</span>
+          <span class="metric-label">Lumina-Next speedup</span>
+        </div>
+        <div>
+          <span class="metric-value">+11.9%</span>
+          <span class="metric-label">ImageReward on Lumina</span>
+        </div>
+        <div>
+          <span class="metric-value">1.73x</span>
+          <span class="metric-label">FLUX.1-dev speedup</span>
+        </div>
+        <div>
+          <span class="metric-value">65%</span>
+          <span class="metric-label">Human preference vs. dense</span>
+        </div>
+      </section>
+
+      <section id="abstract" class="section section-pad narrow">
+        <p class="eyebrow">Abstract</p>
+        <h2>Faster DiT inference that improves aesthetic quality instead of merely preserving it.</h2>
+        <p>
+          Diffusion Transformers deliver high-fidelity text-to-image generation, but dense self-attention over spatial tokens makes inference expensive. AccelAes observes that DiT denoising is spatially non-uniform with respect to aesthetic descriptors: regions associated with aesthetic prompt tokens receive concentrated attention and vary more across timesteps, while low-affinity regions evolve smoothly.
+        </p>
+        <p>
+          AccelAes builds <strong>AesMask</strong>, a one-shot aesthetic focus mask from prompt semantics and internal attention, then uses <strong>SkipSparse</strong> and <strong>StepCache</strong> to reduce redundant spatial and temporal computation. On representative DiT backbones, AccelAes consistently reduces latency while improving preference-oriented quality.
+        </p>
+      </section>
+
+      <section id="method" class="section section-pad">
+        <div class="section-heading">
+          <p class="eyebrow">Method</p>
+          <h2>Aesthetic-aware spatio-temporal reduction</h2>
+          <p>
+            The method turns aesthetic descriptors into an executable compute budget: update perceptually important regions carefully, reuse smoother regions, and skip predictable steps.
+          </p>
+        </div>
+
+        <div class="method-grid">
+          <article class="method-card">
+            <span class="step">01</span>
+            <h3>AesMask</h3>
+            <p>
+              Match prompt tokens to aesthetic anchors with CLIP similarity, aggregate their cross-attention affinity, and form a one-shot focus mask for image patches that control perceived quality.
+            </p>
+          </article>
+          <article class="method-card">
+            <span class="step">02</span>
+            <h3>SkipSparse</h3>
+            <p>
+              For compatible DiT architectures, foreground queries attend to all keys and values while low-affinity background tokens reuse cached attention and FFN outputs.
+            </p>
+          </article>
+          <article class="method-card">
+            <span class="step">03</span>
+            <h3>Spatial CFG</h3>
+            <p>
+              Assign stronger guidance to aesthetic regions and weaker guidance to less critical regions, improving detail where it matters without extra training.
+            </p>
+          </article>
+          <article class="method-card">
+            <span class="step">04</span>
+            <h3>StepCache</h3>
+            <p>
+              Reuse and extrapolate noise predictions across predictable timesteps, providing an architecture-friendly temporal speedup for Lumina, SD3, and FLUX.
+            </p>
+          </article>
+        </div>
+
+        <figure class="wide-figure">
+          <img src="assets/pipe1.webp" alt="The AccelAes framework with prompt semantics, CLIP token embedding, AesMask, DiT, SkipSparse, and region-wise outputs." loading="lazy">
+          <figcaption>
+            The AccelAes framework builds AesMask from prompt semantics and cross-attention, then uses it for spatially adaptive computation, region-wise guidance, and step-level caching.
+          </figcaption>
+        </figure>
+
+        <figure class="wide-figure spaced">
+          <img src="assets/ablation_aesmask.webp" alt="AesMask analysis showing heatmaps, mask overlays, ImageReward, Aesthetic score, CLIP score, and CLIP anchor similarity for prompt tokens." loading="lazy">
+          <figcaption>
+            AesMask highlights semantically meaningful aesthetic regions from internal attention, enabling direct threshold masks that preserve the important foreground without external segmentation.
+          </figcaption>
+        </figure>
+      </section>
+
+      <section id="results" class="section section-pad alt">
+        <div class="section-heading">
+          <p class="eyebrow">Results</p>
+          <h2>Stronger Pareto behavior across DiT families</h2>
+          <p>
+            AccelAes is evaluated on Lumina-Next-T2I, SD3-Medium, and FLUX.1-dev under training-free settings.
+          </p>
+        </div>
+
+        <div class="results-column">
+          <figure class="figure-panel results-figure">
+            <img src="assets/main_reults_sd3flux.webp" alt="Baseline comparisons on SD3-Medium and FLUX.1-dev showing AccelAes speedups and quality metrics." loading="lazy">
+            <figcaption>Baseline comparisons on SD3-Medium and FLUX.1-dev.</figcaption>
+          </figure>
+
+          <div class="table-panel results-table">
+            <h3>Backbone Summary</h3>
+            <div class="table-wrap">
+              <table>
+                <thead>
+                  <tr>
+                    <th>Backbone</th>
+                    <th>Speedup</th>
+                    <th>ImageReward</th>
+                    <th>HPSv2</th>
+                    <th>Aesthetic</th>
+                  </tr>
+                </thead>
+                <tbody>
+                  <tr>
+                    <td>Lumina-Next</td>
+                    <td><strong>2.11x</strong></td>
+                    <td><strong>0.841</strong></td>
+                    <td><strong>0.2740</strong></td>
+                    <td><strong>6.041</strong></td>
+                  </tr>
+                  <tr>
+                    <td>SD3-Medium</td>
+                    <td><strong>1.50x</strong></td>
+                    <td><strong>0.904</strong></td>
+                    <td><strong>0.3014</strong></td>
+                    <td><strong>5.990</strong></td>
+                  </tr>
+                  <tr>
+                    <td>FLUX.1-dev</td>
+                    <td><strong>1.73x</strong></td>
+                    <td><strong>1.317</strong></td>
+                    <td><strong>0.3214</strong></td>
+                    <td><strong>6.372</strong></td>
+                  </tr>
+                </tbody>
+              </table>
+            </div>
+            <p class="note">
+              Numbers are reported from the repository evaluation tables. Higher ImageReward, HPSv2, and Aesthetic scores are better.
+            </p>
+          </div>
+
+          <figure class="figure-panel results-figure ablation-figure">
+            <img src="assets/ablation_combined.webp" alt="SkipSparse ablation comparing step-level reuse, spatial allocation, and full AccelAes variants by speedup and ImageReward." loading="lazy">
+            <figcaption>SkipSparse ablation: spatial allocation and step-level reuse play complementary roles.</figcaption>
+          </figure>
+        </div>
+      </section>
+
+      <section id="rebuttal" class="section section-pad">
+        <div class="section-heading">
+          <p class="eyebrow">Additional Validation</p>
+          <h2>Human study, robustness, and efficiency diagnostics</h2>
+          <p>
+            We distill additional experiments into compact tables and charts: human preference, prompt robustness, scene generalization, overhead, distilled-model compatibility, and static-mask behavior.
+          </p>
+        </div>
+
+        <div class="evidence-grid">
+          <article class="evidence-panel">
+            <h3>Blind Human Preference</h3>
+            <p class="panel-note">15 annotators, 60 randomized pairs, 4 questions. Bars show non-tie win rates for AccelAes.</p>
+            <div class="bar-table" aria-label="Human preference win rates">
+              <div class="bar-row"><span>Aes vs Dense</span><div class="bar-track"><i style="width:67%"></i></div><strong>67%</strong></div>
+              <div class="bar-row"><span>Aes vs FORA</span><div class="bar-track"><i style="width:89%"></i></div><strong>89%</strong></div>
+              <div class="bar-row"><span>Aes vs w/o SCFG</span><div class="bar-track"><i style="width:66%"></i></div><strong>66%</strong></div>
+            </div>
+            <div class="table-wrap compact-table">
+              <table>
+                <thead><tr><th>Comparison</th><th>Overall</th><th>Align</th><th>Appeal</th><th>Artifacts</th></tr></thead>
+                <tbody>
+                  <tr><td>Aes/Dense</td><td>67%</td><td>59%</td><td>68%</td><td>64%</td></tr>
+                  <tr><td>Aes/FORA</td><td>89%</td><td>90%</td><td>87%</td><td>94%</td></tr>
+                  <tr><td>Aes/no SCFG</td><td>66%</td><td>69%</td><td>66%</td><td>68%</td></tr>
+                </tbody>
+              </table>
+            </div>
+          </article>
+
+          <article class="evidence-panel">
+            <h3>Prompt Robustness</h3>
+            <p class="panel-note">AccelAes works without explicit aesthetic adjectives and still benefits when reliable cues are present.</p>
+            <div class="delta-cards">
+              <div><span>Descriptor-free</span><strong>+3.1%</strong><small>IR 1.109 to 1.144</small></div>
+              <div><span>Descriptor-added</span><strong>+4.8%</strong><small>IR 1.168 to 1.224</small></div>
+            </div>
+            <p class="panel-note">Fallback behavior handles prompts without reliable aesthetic triggers.</p>
+          </article>
+
+          <article class="evidence-panel wide-panel">
+            <h3>Scene Generalization</h3>
+            <p class="panel-note">All six hard scene categories show positive ImageReward change, including non-centric and ambiguous foreground/background cases.</p>
+            <div class="scene-chart" aria-label="Scene-stratified ImageReward gains">
+              <div><span>Single-subject</span><i style="width:13%"></i><strong>+1.8%</strong></div>
+              <div><span>Multi-object</span><i style="width:53%"></i><strong>+7.2%</strong></div>
+              <div><span>Dense-crowd</span><i style="width:37%"></i><strong>+5.0%</strong></div>
+              <div><span>Landscape</span><i style="width:24%"></i><strong>+3.3%</strong></div>
+              <div><span>Indoor-clutter</span><i style="width:50%"></i><strong>+6.9%</strong></div>
+              <div><span>Abstract-art</span><i style="width:100%"></i><strong>+13.7%</strong></div>
+            </div>
+          </article>
+
+          <article class="evidence-panel">
+            <h3>End-to-End Overhead</h3>
+            <div class="stat-pair">
+              <div><span>Dense</span><strong>12.74s</strong></div>
+              <div><span>Full AccelAes</span><strong>6.12s</strong></div>
+              <div><span>Speedup</span><strong>2.08x</strong></div>
+              <div><span>AesMask + SCFG cost</span><strong>0.18s</strong><small>1.4% of dense</small></div>
+            </div>
+          </article>
+
+          <article class="evidence-panel">
+            <h3>Few-Step FLUX Compatibility</h3>
+            <p class="panel-note">FLUX.1-schnell uses only 4 distilled steps, so this test emphasizes compatibility rather than large wall-clock gains.</p>
+            <div class="table-wrap compact-table">
+              <table>
+                <thead><tr><th>Config</th><th>IR</th><th>HPSv2</th><th>CLIP</th></tr></thead>
+                <tbody>
+                  <tr><td>schnell-dense</td><td>1.090</td><td>0.301</td><td>0.268</td></tr>
+                  <tr><td>TaylorSeer</td><td>1.100</td><td>0.301</td><td>0.269</td></tr>
+                  <tr><td><strong>AccelAes</strong></td><td><strong>1.132</strong></td><td><strong>0.304</strong></td><td><strong>0.270</strong></td></tr>
+                </tbody>
+              </table>
+            </div>
+          </article>
+
+          <article class="evidence-panel wide-panel">
+            <h3>Static AesMask and Failure Recovery</h3>
+            <div class="mask-chart">
+              <div><span>Static mask</span><i style="height:100%"></i><strong>IR 0.407 / 2.08x</strong></div>
+              <div><span>5-step refresh</span><i style="height:96%"></i><strong>IR 0.392 / 1.94x</strong></div>
+              <div><span>Per-step refresh</span><i style="height:94%"></i><strong>IR 0.381 / 1.82x</strong></div>
+            </div>
+            <p class="panel-note">Frequent refresh introduces late-stage attention jitter. Late-mask and fallback correction recover 92.7-95.4% of dense IR on mined failure cases.</p>
+          </article>
+        </div>
+      </section>
+
+      <section id="gallery" class="section section-pad">
+        <div class="section-heading">
+          <p class="eyebrow">Visual Gallery</p>
+          <h2>Qualitative comparisons</h2>
+          <p>
+            Visual examples show that AccelAes keeps semantic structure while sharpening perceptually important details.
+          </p>
+        </div>
+
+        <div class="gallery-grid">
+          <figure>
+            <img src="assets/vis_compare.webp" alt="Qualitative comparison across baseline, FORA, Delta-DiT, TeaCache, TaylorSeer, SDiT, RAS, and AccelAes." loading="lazy">
+            <figcaption>Qualitative comparison across representative training-free acceleration methods.</figcaption>
+          </figure>
+          <figure>
+            <img src="assets/vis_comparison.webp" alt="Aesthetic spatial non-uniformity visualization with cross-attention maps, masks, selected regions, and AccelAes outputs." loading="lazy">
+            <figcaption>Aesthetics-induced spatial non-uniformity: attention maps, masks, selected regions, and final outputs.</figcaption>
+          </figure>
+        </div>
+
+        <figure class="wide-figure">
+          <img src="assets/vis_lumina.webp" alt="Additional qualitative comparison on Lumina-Next-T2I." loading="lazy">
+          <figcaption>
+            Additional qualitative comparison on Lumina-Next-T2I.
+          </figcaption>
+        </figure>
+
+        <div class="supplementary-grid" aria-label="Supplementary figures">
+          <figure>
+            <img src="assets/vis_sd3.webp" alt="Additional qualitative comparison on SD3-Medium." loading="lazy">
+            <figcaption>Additional qualitative comparison on SD3-Medium.</figcaption>
+          </figure>
+          <figure>
+            <img src="assets/vis_flux.webp" alt="Additional qualitative comparison on FLUX.1-dev." loading="lazy">
+            <figcaption>Additional qualitative comparison on FLUX.1-dev.</figcaption>
+          </figure>
+          <figure>
+            <img src="assets/vis_maskstep.webp" alt="Qualitative sensitivity to mask step." loading="lazy">
+            <figcaption>Qualitative sensitivity to <code>mask_step</code>.</figcaption>
+          </figure>
+          <figure>
+            <img src="assets/vis_ratio.webp" alt="Qualitative sensitivity to skip ratio." loading="lazy">
+            <figcaption>Qualitative sensitivity to <code>skip_ratio</code>.</figcaption>
+          </figure>
+        </div>
+      </section>
+
+      <section id="citation" class="section section-pad narrow citation-section">
+        <p class="eyebrow">Citation</p>
+        <h2>Cite AccelAes</h2>
+        <div class="code-block">
+          <button class="copy-button" type="button" data-copy="#bibtex">Copy</button>
+          <pre id="bibtex"><code>@article{yin2026accelaes,
+  title={AccelAes: Accelerating Diffusion Transformers for Training-Free Aesthetic-Enhanced Image Generation},
+  author={Yin, Xuanhua and Xu, Chuanzhi and Zhou, Haoxian and Wei, Boyu and Cai, Weidong},
+  journal={arXiv preprint arXiv:2603.12575},
+  year={2026}
+}</code></pre>
+        </div>
+      </section>
+    </main>
+
+    <footer class="footer">
+      <p>
+        AccelAes project page by <strong>Xuanhua Yin</strong>. Accepted to ECCV 2026.
+      </p>
+      <p>
+        <a href="https://github.com/xuanhuayin/AccelAes">GitHub</a>
+        <span aria-hidden="true">/</span>
+        <a href="https://arxiv.org/abs/2603.12575">arXiv</a>
+      </p>
+    </footer>
+
+    <script src="script.js"></script>
+  </body>
+</html>
